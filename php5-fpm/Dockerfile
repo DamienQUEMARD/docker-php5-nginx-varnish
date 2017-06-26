@@ -3,12 +3,16 @@ FROM php:5.6-fpm
 
 MAINTAINER Damien QUEMARD <damien.quemard@gmail.com>
 
-# Tools
-RUN apt-get update && apt-get install --no-install-recommends -y \
+
+#Tools
+RUN apt-get update
+RUN apt-get install --yes --force-yes cron g++ gettext libicu-dev openssl libc-client-dev libkrb5-dev libxml2-dev libfreetype6-dev libgd-dev libmcrypt-dev bzip2 libbz2-dev libtidy-dev libcurl4-openssl-dev libz-dev libmemcached-dev libxslt-dev
+RUN apt-get install -y \
         wget \
         vim \
         git \
-		unzip
+		unzip \
+		curl
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- \
@@ -19,43 +23,37 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Imagemagick
-RUN apt-get install --yes --force-yes libmagickwand-dev libmagickcore-dev
-RUN yes '' | pecl install -f imagick
-RUN docker-php-ext-enable imagick
-
 
 # PHP Configuration
-RUN docker-php-ext-install  opcache
+RUN docker-php-ext-install opcache
+RUN docker-php-ext-install bcmath
+RUN docker-php-ext-install bz2
+RUN docker-php-ext-install calendar
+RUN docker-php-ext-install dba
 RUN docker-php-ext-install exif
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install gettext
-RUN docker-php-ext-install mysql mysqli pdo pdo_mysql
-RUN apt-get install -y zlib1g-dev libicu-dev g++
-RUN docker-php-ext-configure intl
+RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
+RUN docker-php-ext-install imap
 RUN docker-php-ext-install intl
+RUN docker-php-ext-install mcrypt
+RUN docker-php-ext-install mysql mysqli pdo pdo_mysql
+RUN docker-php-ext-install soap
+RUN docker-php-ext-install tidy
+RUN docker-php-ext-install xmlrpc
 RUN docker-php-ext-install mbstring
+RUN docker-php-ext-install xsl
 RUN docker-php-ext-install zip
 RUN yes '' | pecl install -f apc
 RUN docker-php-ext-configure hash --with-mhash
-
-
-
-# install xdebug
-#RUN pecl install xdebug
-
 RUN docker-php-ext-enable opcache
 
-#RUN docker-php-ext-enable xdebug opcache
-RUN echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-RUN echo "display_startup_errors = On" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-RUN echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-RUN echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-RUN echo "xdebug.idekey=\"PHPSTORM\"" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-RUN echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-
+#PHP.ini configuration
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
 RUN usermod -u 1000 www-data
+RUN usermod -G staff www-data
+
+WORKDIR /var/www/workspace
+

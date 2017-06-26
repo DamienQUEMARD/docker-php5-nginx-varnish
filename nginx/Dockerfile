@@ -9,17 +9,14 @@ RUN apt-get update && apt-get install -y \
 ADD ./config/nginx.conf /etc/nginx/
 
 # VHOSTS
+RUN rm /etc/nginx/sites-enabled/default
 ADD ./vhost/*.conf /etc/nginx/sites-available/
 ADD ./vhost/*.conf /etc/nginx/sites-enabled/
-
-#RUN ln -s /etc/nginx/sites-available/velizy-dev.conf /etc/nginx/sites-enabled/velizy-dev
-#RUN ln -s /etc/nginx/sites-available/utp.conf /etc/nginx/sites-enabled/utp
-
-RUN rm /etc/nginx/sites-enabled/default
 
 RUN echo "upstream php-upstream { server php:9000; }" > /etc/nginx/conf.d/upstream.conf
 
 RUN usermod -u 1000 www-data
+
 
 CMD ["nginx"]
 
