@@ -45,15 +45,16 @@ RUN docker-php-ext-install xmlrpc
 RUN docker-php-ext-install mbstring
 RUN docker-php-ext-install xsl
 RUN docker-php-ext-install zip
-RUN yes '' | pecl install -f apc
+#RUN yes '' | pecl install -f apc
 RUN docker-php-ext-configure hash --with-mhash
 RUN docker-php-ext-enable opcache
 
 #PHP.ini configuration
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
-RUN usermod -u 1000 www-data
-RUN usermod -G staff www-data
+RUN usermod -u 501 www-data
+# RUN usermod -u 1000 www-data
+
 
 WORKDIR /var/www/workspace
 
