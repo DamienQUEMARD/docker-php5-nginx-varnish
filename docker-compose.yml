@@ -22,7 +22,7 @@ services:
             - ${WORKSPACE_APP_PATH}:/var/www/workspace
 
     db:
-        user: "1000:50"
+        user: "501:50"
         image: mysql
         container_name: db
         command: mysqld --sql_mode=""
