@@ -23,6 +23,12 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+# wkhtmltopdf
+RUN apt-get install -y libxrender1 libfontconfig libxtst6 xz-utils
+RUN curl "https://downloads.wkhtmltopdf.org/0.12/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz" -L -o "wkhtmltopdf.tar.xz"
+RUN tar Jxvf wkhtmltopdf.tar.xz
+RUN mv wkhtmltox/bin/wkhtmltopdf /usr/bin/wkhtmltopdf
+
 
 # PHP Configuration
 RUN docker-php-ext-install opcache
