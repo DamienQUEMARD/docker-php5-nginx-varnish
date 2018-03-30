@@ -1,8 +1,6 @@
-# See https://github.com/docker-library/php/blob/4677ca134fe48d20c820a19becb99198824d78e3/7.0/fpm/Dockerfile
 FROM php:5.6-fpm
 
 MAINTAINER Damien QUEMARD <damien.quemard@gmail.com>
-
 
 #Tools
 RUN apt-get update
@@ -10,6 +8,7 @@ RUN apt-get install --yes --force-yes cron g++ gettext libicu-dev openssl libc-c
 RUN apt-get install -y \
         wget \
         vim \
+        nano \
         git \
 		unzip \
 		curl
@@ -28,6 +27,7 @@ RUN apt-get install -y libxrender1 libfontconfig libxtst6 xz-utils
 RUN curl "https://downloads.wkhtmltopdf.org/0.12/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz" -L -o "wkhtmltopdf.tar.xz"
 RUN tar Jxvf wkhtmltopdf.tar.xz
 RUN mv wkhtmltox/bin/wkhtmltopdf /usr/bin/wkhtmltopdf
+RUN mv wkhtmltox/bin/wkhtmltoimage /usr/bin/wkhtmltoimage
 
 # LDAP
 RUN apt-get install libldap2-dev -y
@@ -38,10 +38,10 @@ RUN docker-php-ext-install ldap
 RUN curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n
 RUN chmod +x /usr/local/bin/n
 RUN n stable
-RUN apt-get install -y nodejs
+RUN apt-get install -y nodejs npm
 RUN npm install -g less
 RUN npm install -g uglify-js
-RUN npm install -g uglifycss
+RUN npm install -g uglifycss@0.0.27
 
 
 # PHP Configuration
@@ -72,9 +72,14 @@ RUN docker-php-ext-enable opcache
 #PHP.ini configuration
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
-RUN usermod -u 501 www-data
+# Mac User
+# RUN usermod -u 501 www-data
+
+# Linux User
 # RUN usermod -u 1000 www-data
 
+RUN useradd -ms /bin/bash docker
+USER docker
 
 WORKDIR /var/www/workspace
 

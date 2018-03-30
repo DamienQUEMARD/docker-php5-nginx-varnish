@@ -12,6 +12,8 @@ services:
             - php
         volumes:
             - ./logs/nginx/:/var/log/nginx
+        tty: true
+        restart: always
 
     php:
         build: php5-fpm
@@ -19,13 +21,15 @@ services:
         ports:
             - 9000:9000
         volumes:
-            - ${WORKSPACE_APP_PATH}:/var/www/workspace
+            - ${WORKSPACE_APP_PATH}:/var/www/workspace:cached
+        tty: true
+        restart: always
 
     db:
         user: "501:50"
         image: mysql
         container_name: db
-        #command: mysqld --sql_mode=""
+        command: mysqld --sql_mode=""
         ports:
             - "3306:3306"
         volumes:
@@ -34,6 +38,8 @@ services:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        tty: true
+        restart: always
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
