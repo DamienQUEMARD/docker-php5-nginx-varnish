@@ -29,6 +29,20 @@ RUN curl "https://downloads.wkhtmltopdf.org/0.12/0.12.4/wkhtmltox-0.12.4_linux-g
 RUN tar Jxvf wkhtmltopdf.tar.xz
 RUN mv wkhtmltox/bin/wkhtmltopdf /usr/bin/wkhtmltopdf
 
+# LDAP
+RUN apt-get install libldap2-dev -y
+RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/
+RUN docker-php-ext-install ldap
+
+# NodeJS
+RUN curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n
+RUN chmod +x /usr/local/bin/n
+RUN n stable
+RUN apt-get install -y nodejs
+RUN npm install -g less
+RUN npm install -g uglify-js
+RUN npm install -g uglifycss
+
 
 # PHP Configuration
 RUN docker-php-ext-install opcache

@@ -25,7 +25,7 @@ services:
         user: "501:50"
         image: mysql
         container_name: db
-        command: mysqld --sql_mode=""
+        #command: mysqld --sql_mode=""
         ports:
             - "3306:3306"
         volumes:
@@ -36,14 +36,23 @@ services:
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
     phpmyadmin:
-            image: phpmyadmin/phpmyadmin
-            container_name: phpmyadmin
-            volumes:
-                - ${CONFIG_FILE}:/etc/phpmyadmin/config.user.inc.php
-            ports:
-                - "8080:80"
-            links:
-                - db
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        volumes:
+            - ${CONFIG_FILE}:/etc/phpmyadmin/config.user.inc.php
+        ports:
+            - "8080:80"
+        links:
+            - db
+
+    elasticsearch:
+        image: elasticsearch:1.7-alpine
+        container_name: elasticsearch
+        ports:
+          - 81:80
+        volumes_from:
+          - php
+
 
     varnish:
         image: biko2/docker-varnish
