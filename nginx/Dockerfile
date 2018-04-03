@@ -15,7 +15,10 @@ ADD ./vhost/*.conf /etc/nginx/sites-enabled/
 
 RUN echo "upstream php-upstream { server php:9000; }" > /etc/nginx/conf.d/upstream.conf
 
-RUN usermod -u 501 www-data
+# Mac User
+# RUN usermod -u 501 www-data
+
+# Linux User
 # RUN usermod -u 1000 www-data
 
 CMD ["nginx"]
