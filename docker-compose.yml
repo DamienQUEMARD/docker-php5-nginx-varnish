@@ -12,7 +12,6 @@ services:
             - php
         volumes:
             - ./logs/nginx/:/var/log/nginx
-        tty: true
         restart: always
 
     php:
@@ -22,7 +21,6 @@ services:
             - 9000:9000
         volumes:
             - ${WORKSPACE_APP_PATH}:/var/www/workspace:cached
-        tty: true
         restart: always
 
     db:
@@ -38,7 +36,6 @@ services:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-        tty: true
         restart: always
 
     phpmyadmin:
@@ -58,6 +55,9 @@ services:
           - 81:80
         volumes_from:
           - php
+        volumes:
+            - ${ES_DATA_PATH}:/usr/share/elasticsearch/data
+            - ${ES_CONFIG_PATH}:/usr/share/elasticsearch/config
         restart: always
 
 
