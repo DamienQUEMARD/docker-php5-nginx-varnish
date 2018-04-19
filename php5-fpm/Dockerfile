@@ -29,6 +29,9 @@ RUN tar Jxvf wkhtmltopdf.tar.xz
 RUN mv wkhtmltox/bin/wkhtmltopdf /usr/bin/wkhtmltopdf
 RUN mv wkhtmltox/bin/wkhtmltoimage /usr/bin/wkhtmltoimage
 
+# Poppler-utils (pdftotext)
+RUN apt-get install poppler-utils -y
+
 # LDAP
 RUN apt-get install libldap2-dev -y
 RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/
