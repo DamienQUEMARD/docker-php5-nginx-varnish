@@ -41,7 +41,7 @@ RUN docker-php-ext-install ldap
 RUN curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n
 RUN chmod +x /usr/local/bin/n
 RUN n stable
-RUN apt-get install -y nodejs npm
+RUN apt-get install -y nodejs
 RUN npm install -g less
 RUN npm install -g uglify-js
 RUN npm install -g uglifycss@0.0.27
