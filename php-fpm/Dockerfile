@@ -1,4 +1,6 @@
-FROM php:5.6-fpm
+ARG PHP_VERSION=${PHP_VERSION}
+
+FROM php:${PHP_VERSION}-fpm
 
 MAINTAINER Damien QUEMARD <damien.quemard@gmail.com>
 
