@@ -40,10 +40,10 @@ RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/
 RUN docker-php-ext-install ldap
 
 # NodeJS
-RUN curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n
-RUN chmod +x /usr/local/bin/n
-RUN n stable
+RUN apt-get install --yes gnupg
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs
+RUN apt-get install -y build-essential
 RUN npm install -g less
 RUN npm install -g uglify-js
 RUN npm install -g uglifycss@0.0.27
