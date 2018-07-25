@@ -11,7 +11,7 @@ services:
         volumes_from:
             - php
         volumes:
-            - ./logs/nginx/:/var/log/nginx
+            - ./logs/nginx/:/var/log/nginx:delegated
         restart: always
 
     php:
@@ -24,7 +24,7 @@ services:
         ports:
             - 9000:9000
         volumes:
-            - ${WORKSPACE_APP_PATH}:/var/www/workspace:cached
+            - ${WORKSPACE_APP_PATH}:/var/www/workspace:delegated
         restart: always
 
     db:
@@ -61,8 +61,8 @@ services:
         volumes_from:
           - php
         volumes:
-            - ${ES_DATA_PATH}:/usr/share/elasticsearch/data
-            - ${ES_CONFIG_PATH}:/usr/share/elasticsearch/config
+            - ${ES_DATA_PATH}:/usr/share/elasticsearch/data:delegated
+            - ${ES_CONFIG_PATH}:/usr/share/elasticsearch/config:delegated
         restart: always
 
     varnish:

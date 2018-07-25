@@ -46,11 +46,10 @@ RUN apt-get install -y nodejs
 RUN apt-get install -y build-essential
 RUN npm install -g less
 RUN npm install -g uglify-js
-RUN npm install -g uglifycss@0.0.27
+RUN npm install -g uglifycss@0.0.29
 
 
 # PHP Configuration
-RUN docker-php-ext-install opcache
 RUN docker-php-ext-install bcmath
 RUN docker-php-ext-install bz2
 RUN docker-php-ext-install calendar
@@ -63,18 +62,41 @@ RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
 RUN docker-php-ext-install imap
 RUN docker-php-ext-install intl
 RUN docker-php-ext-install mcrypt
-RUN docker-php-ext-install mysql mysqli pdo pdo_mysql
+RUN docker-php-ext-install mysqli pdo_mysql pdo
 RUN docker-php-ext-install soap
 RUN docker-php-ext-install tidy
 RUN docker-php-ext-install xmlrpc
 RUN docker-php-ext-install mbstring
 RUN docker-php-ext-install xsl
 RUN docker-php-ext-install zip
-#RUN yes '' | pecl install -f apc
 RUN docker-php-ext-configure hash --with-mhash
-RUN docker-php-ext-enable opcache
 
-#PHP.ini configuration
+# Install OPcache
+RUN docker-php-ext-install opcache
+RUN docker-php-ext-enable opcache 
+RUN echo "opcache.max_accelerated_files = 20000" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
+
+# install and active xdebug
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+RUN echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "display_startup_errors = On" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "xdebug.idekey=\"PHPSTORM\"" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+# Install APCu v5.1.7
+RUN mkdir -p /usr/src/php/ext
+RUN curl -L -o /tmp/apcu-5.1.7.tgz https://pecl.php.net/get/apcu-5.1.7.tgz
+RUN tar xfz /tmp/apcu-5.1.7.tgz
+RUN rm -r /tmp/apcu-5.1.7.tgz
+RUN mv apcu-5.1.7  /usr/src/php/ext/apcu
+RUN docker-php-ext-install apcu
+RUN echo "apc.enable_cli = On" >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini
+ 
+# PHP.ini configuration
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
 # Mac User
