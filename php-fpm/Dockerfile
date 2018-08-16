@@ -25,11 +25,9 @@ ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # wkhtmltopdf
-RUN apt-get install -y libxrender1 libfontconfig libxtst6 xz-utils
-RUN curl "https://downloads.wkhtmltopdf.org/0.12/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz" -L -o "wkhtmltopdf.tar.xz"
-RUN tar Jxvf wkhtmltopdf.tar.xz
-RUN mv wkhtmltox/bin/wkhtmltopdf /usr/bin/wkhtmltopdf
-RUN mv wkhtmltox/bin/wkhtmltoimage /usr/bin/wkhtmltoimage
+RUN apt-get install -y build-essential xorg libssl-dev libxrender1 libfontconfig libxtst6 xz-utils gdebi
+RUN wget "https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb"
+RUN gdebi --n wkhtmltox_0.12.5-1.stretch_amd64.deb
 
 # Poppler-utils (pdftotext)
 RUN apt-get install poppler-utils -y
@@ -58,8 +56,8 @@ RUN docker-php-ext-install exif
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install gettext
-RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
-RUN docker-php-ext-install imap
+#RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
+#RUN docker-php-ext-install imap
 RUN docker-php-ext-install intl
 RUN docker-php-ext-install mcrypt
 RUN docker-php-ext-install mysqli pdo_mysql pdo
