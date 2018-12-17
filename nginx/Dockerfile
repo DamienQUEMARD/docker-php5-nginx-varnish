@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch-slim
 
 MAINTAINER Damien QUEMARD <damien.quemard@gmail.com>
 
