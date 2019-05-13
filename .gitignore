@@ -1,4 +1,7 @@
 .DS_Store
-/logs
 .env
+.docker-sync
+docker-sync.yml
+/logs
+/data
 /nginx/vhost/*.conf

@@ -25,7 +25,7 @@ ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # wkhtmltopdf
-RUN apt-get install -y build-essential xorg libssl-dev libxrender1 libfontconfig libxtst6 xz-utils gdebi
+RUN apt-get install -y build-essential xorg libssl-dev libxrender1 libfontconfig libxtst6 xz-utils gdebi 
 RUN wget "https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb"
 RUN gdebi --n wkhtmltox_0.12.5-1.stretch_amd64.deb
 
