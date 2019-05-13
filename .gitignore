@@ -4,4 +4,4 @@
 docker-sync.yml
 /logs
 /data
-/nginx/vhost/*.conf
+/builds/nginx/vhost/*.conf
